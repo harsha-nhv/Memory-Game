@@ -14,6 +14,7 @@ var cards = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube",
  */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
+var card1, card2;
 
 shuffleFunction();
 
@@ -89,19 +90,44 @@ var parentCard = document.querySelector('.deck');
 
 function cardClicked(evt){
 
-    if(evt.target.class != 'card')
+    if(evt.target.className == 'card')
     {
-        
-
-        if (evt.target.className == 'card'){
-            
-            evt.target.classList.toggle('open');
-            evt.target.classList.toggle('show');
-            evt.target.classList.toggle('match');
+        if (!card1){
+            card1 = evt.target;
+            card1.classList.toggle('show');
+            card1.classList.toggle('open');
         }
-    }
-}
+        else{
+            card2 = evt.target;
+            card2.classList.toggle('show');
+            card2.classList.toggle('open');
+        }
+        
+        
+        if(card1&&card2)
+        {
 
+            if(card1.firstChild.className == card2.firstChild.className){
+                card1.classList.remove('open');
+                card1.classList.toggle('match');
+                card2.classList.remove('open');
+                card2.classList.toggle('match'); 
+                card1 = null;
+                card2 = null;   
+            }
+            else{
+                
+                setTimeout(function(){
+                    card1.classList.remove('open', 'show');
+                    card2.classList.remove('open', 'show');
+                    card1 = null;
+                    card2 = null;
+                }, 1000);
+            }
+        }
+        console.log(card1, card2);       
+    }   
+}
 
 parentCard.addEventListener('click', cardClicked);
 
