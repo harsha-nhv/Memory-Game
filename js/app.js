@@ -5,7 +5,9 @@ var cards = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube",
             "fa-leaf", "fa-bicycle", "fa-bomb",
             "fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube",
             "fa-leaf", "fa-bicycle", "fa-bomb"];
+var card1, card2, score=0;
 
+var scoreCard = document.querySelector('.moves');
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -14,7 +16,7 @@ var cards = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube",
  */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
-var card1, card2;
+
 
 shuffleFunction();
 
@@ -33,7 +35,8 @@ function shuffle(array) {
 }
 
 function shuffleFunction(evt){
-
+    score = 0;
+    scoreCard.innerText = score.toString();
     var deck = document.querySelector(".deck");
     var cardList = document.getElementsByClassName("card");
     for(i=0;i<cards.length;i++){
@@ -89,7 +92,15 @@ var parentCard = document.querySelector('.deck');
 
 
 function cardClicked(evt){
-
+    score += 1;
+    scoreCard.innerText = score.toString();
+    if(score == 1){
+        
+        scoreCard.nextSibling.textContent = " Move";
+    }
+    else{
+        scoreCard.nextSibling.textContent = " Moves";
+    }
     if(evt.target.className == 'card')
     {
         if (!card1){
@@ -122,10 +133,10 @@ function cardClicked(evt){
                     card2.classList.remove('open', 'show');
                     card1 = null;
                     card2 = null;
-                }, 1000);
+                }, 200);
             }
         }
-        console.log(card1, card2);       
+               
     }   
 }
 
