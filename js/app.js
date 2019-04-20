@@ -5,9 +5,11 @@ var cards = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube",
             "fa-leaf", "fa-bicycle", "fa-bomb",
             "fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube",
             "fa-leaf", "fa-bicycle", "fa-bomb"];
-var card1, card2, score=0;
+var card1, card2, score=0, successMoves=0, unsuccessMoves=0;
 
 var scoreCard = document.querySelector('.moves');
+
+var starList = document.getElementsByClassName("fa-star");
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -36,25 +38,40 @@ function shuffle(array) {
 
 function shuffleFunction(evt){
     score = 0;
+    successMoves = 0;
+    unsuccessMoves = 0;
     scoreCard.innerText = score.toString();
+    scoreCard.nextSibling.textContent = " Moves";
     var deck = document.querySelector(".deck");
     var cardList = document.getElementsByClassName("card");
-    for(i=0;i<cards.length;i++){
+    for(let i=0;i<cards.length;i++){
         cardList[i].classList.remove('open', 'show', 'match');
     }
     cards = shuffle(cards);
+    console.log(cards);
     
     
-    for(i=0; i<cards.length; i++){
+    for(let i=0; i<cards.length; i++){
 
         while(cardList[i].firstChild){
             cardList[i].firstChild.remove();
         }
         
         var cardNode = document.createElement('i');
-        cardNode.classList.toggle("fa");
-        cardNode.classList.toggle(cards[i]);
+        cardNode.classList.add("fa");
+        cardNode.classList.add(cards[i]);
         cardList[i].appendChild(cardNode);
+        
+    }
+
+    for(let i=0; i<starList.length; i++){
+        if(starList[i].classList.contains("fa-star-o")){
+            starList[i].classList.remove("fa-star-o");
+        }
+        if(starList[i].classList.contains('fa-star-half-o')){
+            starList[i].classList.remove('fa-star-half-o');
+        }
+        starList[i].classList.add("fa-star");
         
     }
     
@@ -92,42 +109,43 @@ var parentCard = document.querySelector('.deck');
 
 
 function cardClicked(evt){
-    score += 1;
-    scoreCard.innerText = score.toString();
-    if(score == 1){
-        
-        scoreCard.nextSibling.textContent = " Move";
-    }
-    else{
-        scoreCard.nextSibling.textContent = " Moves";
-    }
     if(evt.target.className == 'card')
     {
+        score += 1;
+        scoreCard.innerText = score.toString();
+        if(score == 1){
+        
+            scoreCard.nextSibling.textContent = " Move";
+        }
+        else{
+            scoreCard.nextSibling.textContent = " Moves";
+        }
         if (!card1){
             card1 = evt.target;
-            card1.classList.toggle('show');
-            card1.classList.toggle('open');
+            card1.classList.add('show');
+            card1.classList.add('open');
         }
         else{
             card2 = evt.target;
-            card2.classList.toggle('show');
-            card2.classList.toggle('open');
+            card2.classList.add('show');
+            card2.classList.add('open');
         }
         
         
         if(card1&&card2)
         {
-
+            
             if(card1.firstChild.className == card2.firstChild.className){
+                successMoves += 1;
                 card1.classList.remove('open');
-                card1.classList.toggle('match');
+                card1.classList.add('match');
                 card2.classList.remove('open');
-                card2.classList.toggle('match'); 
+                card2.classList.add('match'); 
                 card1 = null;
                 card2 = null;   
             }
             else{
-                
+                unsuccessMoves += 1;
                 setTimeout(function(){
                     card1.classList.remove('open', 'show');
                     card2.classList.remove('open', 'show');
@@ -136,8 +154,52 @@ function cardClicked(evt){
                 }, 200);
             }
         }
-               
-    }   
+        
+    }
+    displayRating(successMoves, unsuccessMoves);       
+}
+
+function displayRating(a, b){
+    let rating;
+    if(a==0 && b==0){
+        rating = 0;
+    }
+    else{
+        rating = (a/(a+b))*5;
+    }
+    console.log(a,b,rating);
+    if(a !=0 || b!=0)
+    {
+        let it = 0;
+        while(it<5){
+            if(starList[it].classList.contains('fa-star-o')){
+                starList[it].classList.remove('fa-star-o');
+            }
+            if(starList[it].classList.contains('fa-star-half-o')){
+                starList[it].classList.remove('fa-star-half-o');
+            }
+            starList[it].classList.add('fa-star');
+            it += 1;
+        }
+
+        if(rating == Math.floor(rating)){
+            let start = rating;
+            while(start<5){
+                console.log("hello",start);
+                starList[start].classList.add('fa-star-o');
+                start += 1;
+            }
+        }
+        else{
+            starList[Math.floor(rating)].classList.add('fa-star-half-o');
+            let start = Math.floor(rating)+1;
+            while(start<5){
+                console.log("hello!!!!!",start);
+                starList[start].classList.add('fa-star-o');
+                start += 1;
+            }
+        }
+    }
 }
 
 parentCard.addEventListener('click', cardClicked);
