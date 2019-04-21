@@ -48,7 +48,7 @@ function shuffleFunction(evt){
         cardList[i].classList.remove('open', 'show', 'match');
     }
     cards = shuffle(cards);
-    console.log(cards);
+
     
     
     for(let i=0; i<cards.length; i++){
@@ -156,7 +156,7 @@ function cardClicked(evt){
         }
         
     }
-    displayRating(successMoves, unsuccessMoves);       
+    displayRating(successMoves, unsuccessMoves);      
 }
 
 function displayRating(a, b){
@@ -167,7 +167,6 @@ function displayRating(a, b){
     else{
         rating = (a/(a+b))*5;
     }
-    console.log(a,b,rating);
     if(a !=0 || b!=0)
     {
         let it = 0;
@@ -185,7 +184,6 @@ function displayRating(a, b){
         if(rating == Math.floor(rating)){
             let start = rating;
             while(start<5){
-                console.log("hello",start);
                 starList[start].classList.add('fa-star-o');
                 start += 1;
             }
@@ -194,10 +192,31 @@ function displayRating(a, b){
             starList[Math.floor(rating)].classList.add('fa-star-half-o');
             let start = Math.floor(rating)+1;
             while(start<5){
-                console.log("hello!!!!!",start);
                 starList[start].classList.add('fa-star-o');
                 start += 1;
             }
+        }
+    }
+    if(a==8){
+        console.log("Won!!!");
+        modalFunction();
+    }
+}
+function modalFunction(){
+    var modal = document.querySelector(".modal");
+    var span = document.getElementsByClassName("close")[0];
+    var text = document.querySelector(".modal-text");
+
+    text.textContent = "Congratuations!!!!!! You won!!!!!";
+    modal.style.display = 'block';
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
     }
 }
