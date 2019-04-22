@@ -20,7 +20,26 @@ var starList = document.getElementsByClassName("fa-star");
 // Shuffle function from http://stackoverflow.com/a/2450976
 
 
-shuffleFunction();
+cards = shuffle(cards);
+scoreCard.innerText = score.toString();
+scoreCard.nextSibling.textContent = " Moves";
+var deck = document.querySelector(".deck");
+var cardList = document.getElementsByClassName("card");
+for(let i=0;i<cards.length;i++){
+    cardList[i].classList.remove('open', 'show', 'match');
+}
+for(let i=0; i<cards.length; i++){
+
+    while(cardList[i].firstChild){
+        cardList[i].firstChild.remove();
+    }
+    
+    var cardNode = document.createElement('i');
+    cardNode.classList.add("fa");
+    cardNode.classList.add(cards[i]);
+    cardList[i].appendChild(cardNode);
+    
+}
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -37,13 +56,16 @@ function shuffle(array) {
 }
 
 function shuffleFunction(evt){
+    clearInterval(time);
+    tick = 0;
+    time = setInterval(Timer, 1000);
     score = 0;
     successMoves = 0;
     unsuccessMoves = 0;
     scoreCard.innerText = score.toString();
     scoreCard.nextSibling.textContent = " Moves";
-    var deck = document.querySelector(".deck");
-    var cardList = document.getElementsByClassName("card");
+    // var deck = document.querySelector(".deck");
+    // var cardList = document.getElementsByClassName("card");
     for(let i=0;i<cards.length;i++){
         cardList[i].classList.remove('open', 'show', 'match');
     }
@@ -77,9 +99,22 @@ function shuffleFunction(evt){
     
 }
 
+var tick = 0;
+var mm = 0;
+var ss = 0;
+var timeElement = document.querySelector(".time");
 
+var time = setInterval(Timer, 1000);
 
+function Timer(){
+    tick += 1;
 
+    mm = Math.floor(tick/60);
+    ss = tick%60;
+
+    var text = `Time : ${mm}:${ss}`;
+    timeElement.textContent = text;
+}
 
 var reset = document.querySelector('.fa-repeat');
 reset.addEventListener('click', shuffleFunction);
@@ -94,17 +129,6 @@ reset.addEventListener('click', shuffleFunction);
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-/*
-var listOfCards = document.getElementsByClassName('card');
-
-var cardNames = []
-
-for (i=0;i<listOfCards.length;i++){
-    cardNames.push(listOfCards[i].firstElementChild.className.split(" ")[1]);
-} 
-console.log(listOfCards);
-console.log(cardNames);
-*/
 var parentCard = document.querySelector('.deck');
 
 
@@ -198,7 +222,7 @@ function displayRating(a, b){
         }
     }
     if(a==8){
-        console.log("Won!!!");
+        clearInterval(time);
         modalFunction();
     }
 }
@@ -207,7 +231,7 @@ function modalFunction(){
     var span = document.getElementsByClassName("close")[0];
     var text = document.querySelector(".modal-text");
 
-    text.textContent = "Congratuations!!!!!! You won!!!!!";
+    text.textContent = `Congratuations!!!!!! You won in ${mm} minutes ${ss} secs in ${score} moves`;
     modal.style.display = 'block';
 
     span.onclick = function() {

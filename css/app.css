@@ -87,7 +87,7 @@ h1 {
 
 .score-panel {
     text-align: left;
-    width: 345px;
+    width: 660px;
     margin-bottom: 10px;
 }
 
@@ -146,4 +146,8 @@ h1 {
     color: black;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .time{
+      padding-left: 200px;
   }
