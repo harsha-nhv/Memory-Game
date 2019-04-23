@@ -227,17 +227,24 @@ function displayRating(a, b){
     // Checking the winning condition
     if(a==8){
         clearInterval(time);
-        modalFunction();
+        modalFunction(rating);
     }
 }
 
 // Displays a new window after winning the quiz for greetings
-function modalFunction(){
+function modalFunction(rating){
+    var rScore;
+    if (Math.floor(rating) === rating){
+        rScore = rating;
+    }
+    else{
+        rScore = Math.floor(rating) + 0.5;
+    }
     var modal = document.querySelector(".modal");
     var span = document.getElementsByClassName("close")[0];
     var text = document.querySelector(".modal-text");
 
-    text.textContent = `Congratuations!!!!!! You won in ${mm} minutes ${ss} secs in ${score} moves`;
+    text.textContent = `Congratuations!!!!!! You won in ${mm} minutes ${ss} secs in ${score} moves with ${rScore} rating`;
     modal.style.display = 'block';
 
     span.onclick = function() {
